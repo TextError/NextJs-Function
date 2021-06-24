@@ -5,7 +5,7 @@ const ProductID = ({ product }) => {
 
   const { title, description } = product;
 
-  if(!product) return <p>Loading ....</p>
+  // if(!product) return <p>Loading ....</p>
 
   return (
     <>
@@ -25,21 +25,20 @@ const fetchData = async () => {
 
 export const getStaticProps = async ({ params }) => {
   const { id } = params;
-  const data = await fetchData();
-  const product = data.products.find((product) => product.id === id);
+  const { products } = await fetchData();
+  const product = products.find((el) => el.id === id);
 
   if(!product) return { notFound: true };
   return { props: { product }}
 };
 
 export const getStaticPaths = async () => {
+  const { products } = await fetchData();
+  const ids = products.map(el => el.id);
+  const arr = ids.map(id => ( { params: { id }} ));
   return {
-    paths: [
-      { params: { id: 'p1' }},
-      { params: { id: 'p2' }},
-      { params: { id: 'p3' }}
-    ],
-    fallback: true
+    paths: arr,
+    fallback: false
     // fallback: 'blocking'   // No need for fallback Loading component
   }
 };
