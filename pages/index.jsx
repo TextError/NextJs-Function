@@ -1,8 +1,17 @@
 import path from 'path';
 import fs from 'fs/promises';
+import Link from 'next/link';
 
 const Home = ({ products }) => (
-  <>{console.log(products)}</>
+  <ul>
+    { 
+      products.map(({ id, title }) => (
+        <li key={id}>
+          <Link href={`/${id}`}>{title}</Link>
+        </li>
+      )) 
+    }
+  </ul>
 );
 
 export const getStaticProps = async () => {
